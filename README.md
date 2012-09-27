@@ -21,7 +21,7 @@ Objectives
    the bottom view that is revealed doesn't even really have to be a menu).
  * **Compatibility** - The solution works on old Android versions. Personally I
    make sure it works at least on Android 2.2. Also, I make sure this solution
-   can be used as a drop-in solution with PhoneGap projects.
+   can be used as a drop-in solution with PhoneGap / Cordova projects.
 
 
 Usage
@@ -54,4 +54,5 @@ to you to implement this view.
 
 Finally, you can add a button (typically in the top left corner of your main
 view), that calls openMenu() or closeMenu() on the layout as appropriate. This
-also is left as an exercise to the reader.
+also is left as an exercise to the reader. You may also want to implement swipe
+movements for opening/closing the menu.
