@@ -97,12 +97,18 @@ public class SlidingMenuLayout extends ViewGroup {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
+        m_slidedDX = width * 4 / 5;
+
         super.setMeasuredDimension(width, height);
 
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View view = getChildAt(i);
-            measureChild(view, MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), heightMeasureSpec);
+            if (i == count - 1) {
+                measureChild(view, MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), heightMeasureSpec);
+            } else {
+                measureChild(view, MeasureSpec.makeMeasureSpec(m_slidedDX, MeasureSpec.EXACTLY), heightMeasureSpec);
+            }
         }
     }
 
@@ -111,8 +117,6 @@ public class SlidingMenuLayout extends ViewGroup {
 
         int width = right - left;
         int height = bottom - top;
-
-        m_slidedDX = width * 4 / 5;
 
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
