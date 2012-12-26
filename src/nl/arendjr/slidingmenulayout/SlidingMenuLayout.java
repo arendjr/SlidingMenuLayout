@@ -45,6 +45,9 @@ public class SlidingMenuLayout extends ViewGroup {
         }
 
         m_currentDX = 0;
+        if (m_timer != null) {
+        	m_timer.cancel();
+		}        
         m_timer = new Timer();
         m_timer.schedule(new TimerTask() {
             @Override
@@ -70,7 +73,9 @@ public class SlidingMenuLayout extends ViewGroup {
         if (!m_open) {
             return;
         }
-
+        if (m_timer != null) {
+    		m_timer.cancel();
+		}
         m_timer = new Timer();
         m_timer.schedule(new TimerTask() {
             @Override
