@@ -58,8 +58,15 @@ public class SlidingMenuLayout extends ViewGroup {
 
         return m_open;
     }
+    /**
+     * 
+     * @return true if the menu is displayed on the right side of the screen
+     */
+    private boolean isRightMenu() {
+	return m_direction == RIGHT;
+    }
 
-    public void openMenu() {
+    public void openMenu(int direction) {
 
         if (m_open) {
             return;
