@@ -33,6 +33,27 @@ public class SlidingMenuLayout extends ViewGroup {
         init();
     }
 
+    public void toggleMenu() {
+	toggleMenu(LEFT);
+    }
+
+    public void toggleMenu(int direction) {
+	if (isOpen()) {
+            closeMenu();
+	    // JUST FOR TESTING open the menu on the specified side, if it was
+	    // previously opened on opposed side
+	    if (m_direction != direction) {
+		openMenu(direction);
+	    }
+	} else {
+		openMenu(direction);
+	}
+    }
+
+    public void openMenu() {
+	openMenu(LEFT);
+    }
+	
     public boolean isOpen() {
 
         return m_open;
@@ -43,16 +64,16 @@ public class SlidingMenuLayout extends ViewGroup {
         if (m_open) {
             return;
         }
-
+	m_direction = direction;
         m_currentDX = 0;
         if (m_timer != null) {
-        	m_timer.cancel();
-		}        
+            m_timer.cancel();
+	}        
         m_timer = new Timer();
         m_timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                m_currentDX += m_slidedDX / 10;
+                m_currentDX += m_slidedDX / ANIMATION_STEP;
                 if (m_currentDX >= m_slidedDX) {
                     m_currentDX = m_slidedDX;
                     m_timer.cancel();
@@ -63,7 +84,7 @@ public class SlidingMenuLayout extends ViewGroup {
                     }
                 });
             }
-        }, 16, 16);
+        }, ANIMATION_DELAY, ANIMATION_INTERVAL);
 
         m_open = true;
     }
@@ -74,13 +95,13 @@ public class SlidingMenuLayout extends ViewGroup {
             return;
         }
         if (m_timer != null) {
-    		m_timer.cancel();
-		}
+    	    m_timer.cancel();
+	}
         m_timer = new Timer();
         m_timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                m_currentDX -= m_slidedDX / 10;
+                m_currentDX -= m_slidedDX / ANIMATION_STEP;
                 if (m_currentDX <= 0) {
                     m_currentDX = 0;
                     m_timer.cancel();
@@ -91,7 +112,7 @@ public class SlidingMenuLayout extends ViewGroup {
                     }
                 });
             }
-        }, 16, 16);
+        }, ANIMATION_DELAY, ANIMATION_INTERVAL);
 
         m_open = false;
     }
@@ -102,7 +123,11 @@ public class SlidingMenuLayout extends ViewGroup {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        m_slidedDX = width * 4 / 5;
+        if (width < height) { // to adjust the menu size differently according to the device orientation
+		m_slidedDX = width * 4 / 5;
+	} else {
+		m_slidedDX = width * 2 / 5;
+	}
 
         super.setMeasuredDimension(width, height);
 
@@ -126,11 +151,19 @@ public class SlidingMenuLayout extends ViewGroup {
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View view = getChildAt(i);
-            if (i == count - 1) {
-                view.layout(m_currentDX, 0, width + m_currentDX, height);
-            } else {
-                view.layout(0, 0, m_slidedDX, height);
-            }
+            if (i == count - 1) { // the main view
+		if (isRightMenu()) {
+			view.layout(-m_currentDX, 0, width - m_currentDX, height);
+		} else {
+			view.layout(m_currentDX, 0, width + m_currentDX, height);
+		}
+	    } else { // the menu view
+		if (isRightMenu()) {
+			view.layout(width - m_slidedDX, 0, width, height);
+		} else {
+			view.layout(0, 0, m_slidedDX, height);
+		}
+	    }
         }
     }
 
@@ -143,6 +176,13 @@ public class SlidingMenuLayout extends ViewGroup {
 
     private int m_currentDX = 0;
     private int m_slidedDX = 0;
+    private int m_direction = LEFT;
 
     private Timer m_timer;
+    private static final int ANIMATION_DELAY = 25;
+    private static final int ANIMATION_INTERVAL = 21;
+    private static final int ANIMATION_STEP = 10;
+
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
 }
