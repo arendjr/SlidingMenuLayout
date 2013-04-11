@@ -56,3 +56,18 @@ Finally, you can add a button (typically in the top left corner of your main
 view), that calls openMenu() or closeMenu() on the layout as appropriate. This
 also is left as an exercise to the reader. You may also want to implement swipe
 movements for opening/closing the menu.
+
+
+Update
+------
+I made the following modifications on the original code:
+
+1- Fixed a bug that occurs if you frequently open and close the menu quickly. The fix was to cancel the timer, if exists, before scheduling a new one.
+
+2- Add a toggleMenu() function
+
+3- Convert all hard-coded values to constants
+
+4- Adjust the menu width differently according to the phone orientation (see onMeasure).
+
+5- Add **support** for right side menu (see onLayout)
